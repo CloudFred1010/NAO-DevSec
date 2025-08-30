@@ -33,3 +33,4 @@ Thumbs.db
 *.crt
 *.pem
 secrets.json
+pipelines/security-reports/
