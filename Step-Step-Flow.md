@@ -35,7 +35,7 @@ Initialise a GitHub or Azure DevOps repo with:
 
 **Objective:** Prevent insecure or misconfigured code from entering the repo.
 
-- Install and configure **pre-commit** framework locally.  
+- Install and configure **pre-commit** framework locally.
 - Add hooks for:
   - Secret detection (Gitleaks).
   - IaC scanning (Checkov).
