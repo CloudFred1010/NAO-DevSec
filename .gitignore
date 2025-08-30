@@ -10,9 +10,12 @@ yarn-error.log
 
 # Terraform
 .terraform/
+.terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.*
 crash.log
+*.backup
+*.tfplan
 
 # Docker
 *.pid
@@ -33,4 +36,6 @@ Thumbs.db
 *.crt
 *.pem
 secrets.json
+
+# Security/scan outputs
 pipelines/security-reports/
