@@ -1,0 +1,54 @@
+# .pre-commit-config.yaml
+# DevSecOps baseline pre-commit configuration
+# Ensures security + hygiene before every commit
+
+repos:
+  # --- Core pre-commit checks ---
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: detect-private-key
+      - id: check-added-large-files
+
+  # --- Secret scanning ---
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.17.0
+    hooks:
+      - id: gitleaks
+        args: ["--redact"]  # redact secrets in output
+
+  # --- Infrastructure-as-Code scanning ---
+  - repo: https://github.com/bridgecrewio/checkov
+    rev: 3.2.0
+    hooks:
+      - id: checkov
+        args: ["--quiet", "--skip-download"]
+
+  # --- Dockerfile linting ---
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint
+        name: Lint Dockerfiles
+        files: ^Dockerfile
+
+# --- Optional: Container & Dependency scanning ---
+# Uncomment if you want heavy scans before every commit
+
+#  - repo: local
+#    hooks:
+#      - id: trivy-fs-scan
+#        name: Trivy FS Scan
+#        entry: trivy fs .
+#        language: system
+#        types: [file]
+#
+#      - id: snyk-test
+#        name: Snyk Security Test
+#        entry: snyk test
+#        language: system
+#        pass_filenames: false

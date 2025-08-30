@@ -1,0 +1,36 @@
+# Git and VCS
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+.venv
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Terraform
+.terraform
+terraform.tfstate*
+crash.log
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea
+.vscode
+
+# Logs
+*.log
+
+# Config / Secrets
+*.env
+*.key
+*.crt
+*.pem
+secrets.json
