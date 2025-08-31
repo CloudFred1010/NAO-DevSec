@@ -98,8 +98,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # ✅ FIX: use docker login with SP credentials
       - name: Log in to ACR
-        run: az acr login --name ${{ secrets.ACR_NAME }}
+        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
 
       - name: Build and Push Docker Image
         run: |
@@ -110,7 +111,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.9.8   # pick your required version
+          terraform_version: 1.9.8
 
       - name: Terraform Deploy
         working-directory: ${{ github.workspace }}/iac
