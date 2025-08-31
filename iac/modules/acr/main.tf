@@ -6,7 +6,7 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = false
 
   # 🔒 Security best practice: disable public network access
-  public_network_access_enabled = false
+  public_network_access_enabled = true
 
   # 🔑 Optional: enable later if you want to enforce image retention
   # retention_policy {
