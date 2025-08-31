@@ -1,10 +1,10 @@
 variable "resource_group_name" {
-  description = "The resource group for Log Analytics"
+  description = "Resource group name"
   type        = string
 }
 
 variable "location" {
-  description = "Azure region where Log Analytics will be deployed"
+  description = "Azure region"
   type        = string
 }
 
@@ -14,7 +14,7 @@ variable "log_analytics_name" {
 }
 
 variable "app_name" {
-  description = "App Service name (used in diagnostic setting name)"
+  description = "App Service name for diagnostics naming"
   type        = string
 }
 
