@@ -8,24 +8,25 @@ terraform {
     }
   }
 
-  # ✅ Local state for now (terraform.tfstate in working dir)
-  # For team use / pipelines, enable remote backend:
+  # ✅ Default: local state (terraform.tfstate in working dir)
+  # Uncomment the block below to use a remote backend in Azure Storage.
+  #
   # backend "azurerm" {
-  #   resource_group_name  = "nao-tfstate-rg"
-  #   storage_account_name = "naoterraformstate"
-  #   container_name       = "tfstate"
-  #   key                  = "juice-shop.tfstate"
+  #   resource_group_name   = "nao-tfstate-rg"
+  #   storage_account_name  = "naoterraformstate"
+  #   container_name        = "tfstate"
+  #   key                   = "juice-shop.tfstate"
   # }
 }
 
 provider "azurerm" {
   features {}
 
-  # ✅ Authentication happens automatically if:
-  # - Locally: you ran `az login`
-  # - In GitHub Actions: you used `azure/login@v1`
+  # ✅ Authentication handled automatically:
+  # - Locally: via `az login`
+  # - In GitHub Actions: via `azure/login@v2`
 
-  # No need for subscription_id or tenant_id here if you export them:
+  # 🔑 Explicit env vars also work if set in shell/CI:
   #   ARM_SUBSCRIPTION_ID
   #   ARM_TENANT_ID
   #   ARM_CLIENT_ID

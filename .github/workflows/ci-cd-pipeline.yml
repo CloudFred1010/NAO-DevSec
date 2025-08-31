@@ -98,7 +98,10 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # ✅ Fix: Extract AZURE_CREDENTIALS into Terraform env
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      # ✅ Export AZURE_CREDENTIALS into Terraform environment
       - name: Export Azure creds for Terraform
         run: |
           CREDS_JSON='${{ secrets.AZURE_CREDENTIALS }}'
@@ -123,7 +126,7 @@ jobs:
       - name: Terraform Deploy
         working-directory: ${{ github.workspace }}/iac
         run: |
-          terraform init
+          terraform init -input=false -upgrade
           terraform validate
           terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
@@ -144,6 +147,6 @@ jobs:
       - name: Azure Policy Compliance Check
         run: |
           az policy state summarize \
-            --subscription ${{ secrets.SUBSCRIPTION_ID }} \
+            --subscription $ARM_SUBSCRIPTION_ID \
             --query "summaryResults"
         continue-on-error: true
