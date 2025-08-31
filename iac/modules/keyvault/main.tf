@@ -10,16 +10,20 @@ resource "azurerm_key_vault" "kv" {
   # ✅ Security: disable public network access
   public_network_access_enabled = false
 
-  # ✅ Security: enforce firewall rules
+  # ✅ Firewall rules
   network_acls {
     default_action             = "Deny"
-    bypass                     = "AzureServices" # allows trusted services like Azure DevOps
-    ip_rules                   = ["YOUR_IP/32"]  # replace with your admin/dev IP
-    virtual_network_subnet_ids = []              # can add VNets later
+    bypass                     = "AzureServices"
+
+    # FIXED: Must be valid IPv4/CIDR
+    ip_rules                   = [var.admin_ip]
+
+    # If you want VNets, wire them here later
+    virtual_network_subnet_ids = []
   }
 }
 
-# ✅ Keep existing access policy for Terraform SPN/current user
+# ✅ Access policy for Terraform SPN/current user
 resource "azurerm_key_vault_access_policy" "current_user" {
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.current.tenant_id

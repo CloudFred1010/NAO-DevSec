@@ -1,29 +1,35 @@
 variable "location" {
-  type    = string
-  default = "UK South"
+  description = "Azure region to deploy resources"
+  type        = string
+  default     = "UK South"
 }
 
 variable "resource_group_name" {
-  type    = string
-  default = "nao-juice-rg"
+  description = "Name of the Resource Group"
+  type        = string
+  default     = "nao-juice-rg"
 }
 
 variable "acr_name" {
-  type    = string
-  default = "naojuiceshopacr"
+  description = "Azure Container Registry name"
+  type        = string
+  default     = "naojuiceshopacr"
 }
 
 variable "kv_name" {
-  type    = string
-  default = "naojuiceshopkv"
+  description = "Key Vault name"
+  type        = string
+  default     = "naojuiceshopkv"
 }
 
 variable "log_analytics_name" {
-  type    = string
-  default = "naojuiceshoplaw"
+  description = "Log Analytics Workspace name"
+  type        = string
+  default     = "naojuiceshoplaw"
 }
 
 variable "app_name" {
-  type    = string
-  default = "nao-juice-shop"
+  description = "App Service name"
+  type        = string
+  default     = "nao-juice-shop"
 }

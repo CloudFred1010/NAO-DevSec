@@ -1,3 +1,4 @@
-output "app_url" {
-  value = azurerm_app_service.app.default_site_hostname
+output "app_id" {
+  description = "ID of the App Service"
+  value       = azurerm_app_service.app.id
 }

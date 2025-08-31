@@ -8,7 +8,8 @@ terraform {
     }
   }
 
-  # Local state only (terraform.tfstate in this folder)
+  # ✅ Local state for now (terraform.tfstate in working dir)
+  # If you want remote state later, uncomment and update this:
   # backend "azurerm" {
   #   resource_group_name  = "nao-tfstate-rg"
   #   storage_account_name = "naoterraformstate"
@@ -20,7 +21,7 @@ terraform {
 provider "azurerm" {
   features {}
 
-  #  Force Terraform to use Azure CLI authentication
+  # ✅ Authenticate via Azure CLI (recommended for GitHub Actions & local)
   use_cli         = true
   subscription_id = "555334d6-5045-4e6e-ab45-bab9da136091"
   tenant_id       = "952e47c4-05de-4282-83af-5f4b46b1628f"

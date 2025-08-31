@@ -3,6 +3,7 @@ resource "azurerm_network_security_group" "secure_nsg" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
+  # ✅ Allow inbound HTTPS traffic
   security_rule {
     name                       = "AllowHTTPS"
     priority                   = 100
@@ -11,11 +12,11 @@ resource "azurerm_network_security_group" "secure_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
-    source_address_prefix      = "*"         # HTTPS can stay open
+    source_address_prefix      = "*"   # Internet
     destination_address_prefix = "*"
   }
 
-  # 🔒 Harden SSH access
+  # 🔒 Restrict SSH (replace with your real public IP)
   security_rule {
     name                       = "AllowSSH"
     priority                   = 200
@@ -24,7 +25,7 @@ resource "azurerm_network_security_group" "secure_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "185.241.227"   # ✅ Replace with your public IP
+    source_address_prefix      = "185.241.227.123" # 👈 FIX: must be a valid IPv4 with /32
     destination_address_prefix = "*"
   }
 }

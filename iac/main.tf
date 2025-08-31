@@ -1,11 +1,15 @@
+
+# ---------------------------
 # Resource Group
+# ---------------------------
 resource "azurerm_resource_group" "main" {
   name     = var.resource_group_name
   location = var.location
 }
 
-# Call modules
-
+# ---------------------------
+# Modules
+# ---------------------------
 module "acr" {
   source              = "./modules/acr"
   resource_group_name = azurerm_resource_group.main.name
@@ -25,6 +29,7 @@ module "logging" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   log_analytics_name  = var.log_analytics_name
+  app_service_id      = module.appservice.app_id
 }
 
 module "appservice" {

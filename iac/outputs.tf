@@ -1,15 +1,23 @@
-output "resource_group_name" {
-  value = azurerm_resource_group.main.name
-}
-
 output "acr_login_server" {
   value = module.acr.acr_login_server
 }
 
-output "app_service_url" {
-  value = module.appservice.app_url
+output "app_id" {
+  value = module.appservice.app_id
 }
 
-output "key_vault_uri" {
+output "kv_id" {
+  value = module.keyvault.kv_id
+}
+
+output "kv_uri" {
   value = module.keyvault.kv_uri
+}
+
+output "log_analytics_id" {
+  value = module.logging.log_analytics_id
+}
+
+output "nsg_id" {
+  value = module.network.nsg_id
 }
