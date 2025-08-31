@@ -50,14 +50,15 @@ jobs:
         working-directory: app/juice-shop
         run: npm install --legacy-peer-deps
 
-      # --- Software Composition Analysis (SCA) ---
+            # --- Software Composition Analysis (SCA) ---
       - name: Run Snyk SCA
         uses: snyk/actions/node@master
         with:
           command: test
-          args: --file=app/juice-shop/package.json
+          args: --file=app/juice-shop/package.json --org=cloudfred1010
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
 
       # --- Infrastructure as Code (Terraform) ---
       - name: Run Checkov (IaC Scan)
