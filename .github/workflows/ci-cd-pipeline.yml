@@ -2,9 +2,10 @@ name: Secure DevSecOps CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "Devsec-01" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "Devsec-01" ]
+  workflow_dispatch:
 
 jobs:
 
