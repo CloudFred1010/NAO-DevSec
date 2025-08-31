@@ -33,7 +33,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          cd app
+          cd app/juice-shop   # ✅ corrected path
           npm install
           npm test
 
@@ -97,7 +97,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }} ./app
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }} ./app/juice-shop   # ✅ corrected path
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }}
 
       - name: Terraform Deploy
