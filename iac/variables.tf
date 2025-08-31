@@ -1,7 +1,7 @@
 variable "location" {
   description = "Azure region to deploy resources"
   type        = string
-  default     = "UK South"
+  default     = "uksouth" # must match Azure region short name
 }
 
 variable "resource_group_name" {

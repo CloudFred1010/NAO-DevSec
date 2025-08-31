@@ -98,7 +98,15 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # ✅ FIX: use docker login with SP credentials
+      # ✅ Fix 1: Export Terraform Azure env
+      - name: Export Azure env for Terraform
+        run: |
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}" >> $GITHUB_ENV
+
+      # ✅ Fix 2: Use service principal creds to login to ACR
       - name: Log in to ACR
         run: echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
 
@@ -107,7 +115,6 @@ jobs:
           docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }} ./app/juice-shop
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }}
 
-      # ✅ FIX: Install Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:

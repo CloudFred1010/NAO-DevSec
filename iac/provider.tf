@@ -21,15 +21,13 @@ terraform {
 provider "azurerm" {
   features {}
 
-  # ✅ Authenticate via Azure CLI (works locally + GitHub Actions OIDC)
-  use_cli = true
+  # ✅ Authentication happens automatically if:
+  # - Locally: you ran `az login`
+  # - In GitHub Actions: you used `azure/login@v1`
 
-  # ❌ Hardcoding IDs is not recommended.
-  # 🔑 Prefer environment variables:
+  # No need for subscription_id or tenant_id here if you export them:
   #   ARM_SUBSCRIPTION_ID
   #   ARM_TENANT_ID
-  #
-  # Example (Linux/macOS):
-  # export ARM_SUBSCRIPTION_ID="555334d6-5045-4e6e-ab45-bab9da136091"
-  # export ARM_TENANT_ID="952e47c4-05de-4282-83af-5f4b46b1628f"
+  #   ARM_CLIENT_ID
+  #   ARM_CLIENT_SECRET
 }
