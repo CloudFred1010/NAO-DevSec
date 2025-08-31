@@ -39,3 +39,6 @@ secrets.json
 
 # Security/scan outputs
 pipelines/security-reports/
+
+# Ignore the whole Juice Shop app (intentionally vulnerable)
+app/juice-shop/

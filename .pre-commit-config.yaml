@@ -1,48 +1,39 @@
 # .pre-commit-config.yaml
 # DevSecOps baseline pre-commit configuration
 # Ensures security + hygiene before every commit
+# Excludes OWASP Juice Shop (intentionally vulnerable)
 
 repos:
   # --- Core pre-commit checks ---
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0   # latest stable
+    rev: v6.0.0
     hooks:
       - id: check-yaml
+        exclude: ^app/juice-shop/
       - id: check-json
+        exclude: ^app/juice-shop/
       - id: end-of-file-fixer
+        exclude: ^app/juice-shop/
       - id: trailing-whitespace
+        exclude: ^app/juice-shop/
       - id: detect-private-key
+        exclude: ^app/juice-shop/
       - id: check-added-large-files
+        exclude: ^app/juice-shop/
 
   # --- Secret scanning ---
   - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.28.0  # current release
+    rev: v8.28.0
     hooks:
       - id: gitleaks
-        args: ["--redact"]   # redact secrets in output
+        args:
+          - "--redact"
+          - "--config=.gitleaks.toml"
 
   # --- Dockerfile linting ---
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.13.1-beta  # latest patch
+    rev: v2.13.1-beta
     hooks:
       - id: hadolint
         name: Lint Dockerfiles
         files: ^Dockerfile
-
-# --- Optional: Container & Dependency scanning ---
-# These are heavy scans, so leave commented unless you want them
-# before *every* commit. They already run in CI/CD pipeline.
-#
-#  - repo: local
-#    hooks:
-#      - id: trivy-fs-scan
-#        name: Trivy FS Scan
-#        entry: trivy fs .
-#        language: system
-#        types: [file]
-#
-#      - id: snyk-test
-#        name: Snyk Security Test
-#        entry: snyk test
-#        language: system
-#        pass_filenames: false
