@@ -45,6 +45,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ✅ Ensure reports directory exists
+      - name: Create reports directory
+        run: mkdir -p pipelines/security-reports
+
       # ✅ Install dependencies for Snyk scan
       - name: Install Dependencies
         working-directory: app/juice-shop
