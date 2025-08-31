@@ -8,27 +8,32 @@ resource "azurerm_service_plan" "asp" {
   os_type             = "Linux"
   sku_name            = "S1"
 
-  # ✅ Correct for v4+
-  zone_balancing_enabled = true
+  # ❌ Not supported for Standard SKU
+  # zone_balancing_enabled = true
 }
 
 # ---------------------------
-# App Service
+# Linux Web App (recommended replacement for App Service)
 # ---------------------------
-resource "azurerm_app_service" "app" {
+resource "azurerm_linux_web_app" "app" {
   name                = var.app_name
   location            = var.location
   resource_group_name = var.resource_group_name
-  app_service_plan_id = azurerm_service_plan.asp.id
+  service_plan_id     = azurerm_service_plan.asp.id
 
   site_config {
-    linux_fx_version  = "DOCKER|${var.acr_login_server}/${var.app_name}:latest"
-    always_on         = true
-    ftps_state        = "Disabled"
+    application_stack {
+      docker_image_name   = "${var.acr_login_server}/${var.app_name}:latest"
+      docker_registry_url = "https://${var.acr_login_server}"
+    }
 
-    # ✅ Valid settings in v4
-    http2_enabled     = true
-    health_check_path = "/"
+    always_on  = true
+    ftps_state = "Disabled"
+    http2_enabled = true
+
+    # ✅ Both required together in v4.42
+    health_check_path                 = "/"
+    health_check_eviction_time_in_min = 5
   }
 
   https_only = true
@@ -41,14 +46,17 @@ resource "azurerm_app_service" "app" {
 # ---------------------------
 # App Service Authentication
 # ---------------------------
-# ✅ FIX: v2 resource not supported, use v1
-resource "azurerm_app_service_auth_settings" "auth" {
-  name                = azurerm_app_service.app.name
-  resource_group_name = var.resource_group_name
-  enabled             = true
-
-  active_directory {
-    client_id     = "00000000-0000-0000-0000-000000000000" #  replace with your App Registration client_id
-    client_secret = "placeholder-secret"                  #  normally from Key Vault
-  }
-}
+# ⚠️ Authentication support depends on azurerm provider >= v4.55
+# Leave commented until upgrade
+#
+# resource "azurerm_app_service_auth_settings_v2" "auth" {
+#   name                = azurerm_linux_web_app.app.name
+#   resource_group_name = var.resource_group_name
+#   auth_enabled        = true
+#
+#   login {
+#     azure_active_directory {
+#       enabled = true
+#     }
+#   }
+# }

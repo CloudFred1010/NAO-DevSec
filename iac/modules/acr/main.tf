@@ -7,10 +7,4 @@ resource "azurerm_container_registry" "acr" {
 
   # ✅ Security: disable public access
   public_network_access_enabled = false
-
-  # ✅ Retention policy must be inline
-  retention_policy {
-    days    = 30
-    enabled = true
-  }
 }

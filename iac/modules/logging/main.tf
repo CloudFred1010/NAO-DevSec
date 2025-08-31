@@ -13,18 +13,17 @@ resource "azurerm_monitor_diagnostic_setting" "appservice_diagnostics" {
   target_resource_id         = var.app_service_id   # ✅ Provided by appservice module
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
 
-  log {
+  # ✅ Use enabled_log instead of log
+  enabled_log {
     category = "AppServiceHTTPLogs"
-    enabled  = true
   }
 
-  log {
+  enabled_log {
     category = "AppServiceConsoleLogs"
-    enabled  = true
   }
 
-  metric {
+  # ✅ Use enabled_metric instead of metric
+  enabled_metric {
     category = "AllMetrics"
-    enabled  = true
   }
 }
