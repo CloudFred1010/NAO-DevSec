@@ -7,3 +7,8 @@ variable "location" {
   description = "Azure region for NSG"
   type        = string
 }
+
+variable "admin_ip" {
+  description = "Public IPv4 address of the admin workstation allowed for SSH (without /32 suffix)"
+  type        = string
+}

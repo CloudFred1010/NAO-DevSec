@@ -11,25 +11,26 @@ variable "resource_group_name" {
 }
 
 variable "acr_name" {
-  description = "Azure Container Registry name"
+  description = "The name of the Azure Container Registry"
   type        = string
-  default     = "naojuiceshopacr"
 }
 
 variable "kv_name" {
-  description = "Key Vault name"
+  description = "The name of the Azure Key Vault"
   type        = string
-  default     = "naojuiceshopkv"
-}
-
-variable "log_analytics_name" {
-  description = "Log Analytics Workspace name"
-  type        = string
-  default     = "naojuiceshoplaw"
 }
 
 variable "app_name" {
-  description = "App Service name"
+  description = "The name of the App Service / Web App"
   type        = string
-  default     = "nao-juice-shop"
+}
+
+variable "log_analytics_name" {
+  description = "The name of the Log Analytics Workspace"
+  type        = string
+}
+
+variable "admin_ip" {
+  description = "Public IPv4 address of the admin workstation allowed for SSH (e.g., 203.0.113.25)"
+  type        = string
 }

@@ -1,29 +1,39 @@
+# ---------------------------
+# Key Vault
+# ---------------------------
 resource "azurerm_key_vault" "kv" {
-  name                        = var.kv_name
-  location                    = var.location
-  resource_group_name         = var.resource_group_name
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  sku_name                    = "standard"
-  purge_protection_enabled    = true
-  soft_delete_retention_days  = 30
+  name                = var.kv_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name            = "standard"
 
-  # ✅ Security: disable public network access
+  # 🔒 Security
+  purge_protection_enabled     = true   # Protect against accidental deletion
+  soft_delete_retention_days   = 30     # 7–90 days allowed
   public_network_access_enabled = false
 
-  # ✅ Firewall rules
+  # 🔒 Firewall rules
   network_acls {
-    default_action             = "Deny"
-    bypass                     = "AzureServices"
+    default_action = "Deny"
+    bypass         = "AzureServices"
 
-    # FIXED: Must be valid IPv4/CIDR
-    ip_rules                   = [var.admin_ip]
+    # ✅ Must be valid IPv4/CIDR string, e.g., "203.0.113.25/32"
+    ip_rules = [var.admin_ip]
 
-    # If you want VNets, wire them here later
+    # Empty for now – can add VNet private endpoints later
     virtual_network_subnet_ids = []
+  }
+
+  tags = {
+    environment = "devsecops"
+    owner       = "wilfr"
   }
 }
 
-# ✅ Access policy for Terraform SPN/current user
+# ---------------------------
+# Access policy – Terraform SPN/current user
+# ---------------------------
 resource "azurerm_key_vault_access_policy" "current_user" {
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
@@ -34,4 +44,7 @@ resource "azurerm_key_vault_access_policy" "current_user" {
   ]
 }
 
+# ---------------------------
+# Data source – logged in identity
+# ---------------------------
 data "azurerm_client_config" "current" {}

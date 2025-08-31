@@ -8,12 +8,11 @@ resource "azurerm_service_plan" "asp" {
   os_type             = "Linux"
   sku_name            = "S1"
 
-  # ❌ Not supported for Standard SKU
-  # zone_balancing_enabled = true
+  # ✅ zone_balancing_enabled only works on PremiumV3/ElasticPremium
 }
 
 # ---------------------------
-# Linux Web App (recommended replacement for App Service)
+# Linux Web App
 # ---------------------------
 resource "azurerm_linux_web_app" "app" {
   name                = var.app_name
@@ -27,11 +26,11 @@ resource "azurerm_linux_web_app" "app" {
       docker_registry_url = "https://${var.acr_login_server}"
     }
 
-    always_on  = true
-    ftps_state = "Disabled"
+    always_on     = true
+    ftps_state    = "Disabled"
     http2_enabled = true
 
-    # ✅ Both required together in v4.42
+    # ✅ Health checks
     health_check_path                 = "/"
     health_check_eviction_time_in_min = 5
   }
@@ -41,13 +40,18 @@ resource "azurerm_linux_web_app" "app" {
   identity {
     type = "SystemAssigned"
   }
+
+  tags = {
+    environment = "devsecops"
+    owner       = "wilfr"
+  }
 }
 
 # ---------------------------
-# App Service Authentication
+# Optional Authentication
 # ---------------------------
-# ⚠️ Authentication support depends on azurerm provider >= v4.55
-# Leave commented until upgrade
+# Requires azurerm provider >= v4.55
+# Uncomment when upgrading provider
 #
 # resource "azurerm_app_service_auth_settings_v2" "auth" {
 #   name                = azurerm_linux_web_app.app.name

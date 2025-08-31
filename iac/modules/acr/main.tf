@@ -5,6 +5,17 @@ resource "azurerm_container_registry" "acr" {
   sku                 = "Premium"
   admin_enabled       = false
 
-  # ✅ Security: disable public access
-  public_network_access_enabled = true
+  # 🔒 Security best practice: disable public network access
+  public_network_access_enabled = false
+
+  # 🔑 Optional: enable later if you want to enforce image retention
+  # retention_policy {
+  #   days    = 7
+  #   enabled = true
+  # }
+
+  tags = {
+    environment = "devsecops"
+    owner       = "wilfr"
+  }
 }
