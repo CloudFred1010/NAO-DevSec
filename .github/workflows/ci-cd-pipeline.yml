@@ -26,15 +26,15 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Pre-Commit
+      - name: Install Pre-Commit and Run Hooks
         run: |
           pip install pre-commit
           pre-commit run --all-files
 
       - name: Run Unit Tests
+        working-directory: app/juice-shop   # ✅ root of Juice Shop
         run: |
-          cd app/juice-shop   # ✅ correct location
-          npm install
+          npm install --legacy-peer-deps
           npm test
 
   # ---------------------------
@@ -57,9 +57,10 @@ jobs:
 
       # --- Infrastructure as Code (Terraform) ---
       - name: Run Checkov (IaC Scan)
+        working-directory: iac
         run: |
           pip install checkov==3.2.467
-          checkov -d iac/ --quiet
+          checkov -d . --quiet
 
       # --- Container Image Scan ---
       - name: Run Trivy (Container Scan)
@@ -97,12 +98,12 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }} ./app/juice-shop   # ✅ correct location
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }} ./app/juice-shop
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }}
 
       - name: Terraform Deploy
+        working-directory: iac
         run: |
-          cd iac
           terraform init
           terraform validate
           terraform plan -out=tfplan
