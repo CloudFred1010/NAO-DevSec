@@ -50,6 +50,7 @@ jobs:
         uses: snyk/actions/node@master
         with:
           command: test
+          args: --file=app/juice-shop/package.json --all-projects
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -67,7 +68,7 @@ jobs:
           image-ref: ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }}
           format: table
 
-                 # --- SBOM Generation ---
+      # --- SBOM Generation ---
       - name: Generate SBOM (Syft)
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh \
