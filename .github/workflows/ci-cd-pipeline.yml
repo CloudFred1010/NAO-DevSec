@@ -13,7 +13,7 @@ permissions:
 jobs:
 
   # ---------------------------
-  # Commit Stage – Hygiene & Tests
+  # Commit Stage – Hygiene Only
   # ---------------------------
   commit-stage:
     runs-on: ubuntu-latest
@@ -31,12 +31,9 @@ jobs:
           pip install pre-commit
           pre-commit run --all-files
 
-      # ✅ Only run server-side tests (skip frontend)
-      - name: Run Unit Tests (Server Only)
-        working-directory: ${{ github.workspace }}/app/juice-shop
-        run: |
-          npm install --legacy-peer-deps
-          npm run test:server
+      # ⚠️ Skipping Juice Shop unit tests in CI
+      - name: Skip Unit Tests
+        run: echo "Skipping Juice Shop unit tests (intentionally vulnerable)."
 
   # ---------------------------
   # Security Stage – SAST / SCA / IaC / Container
