@@ -45,7 +45,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-            # --- Software Composition Analysis (SCA) ---
+      # ✅ Install dependencies for Snyk
+      - name: Install Dependencies
+        working-directory: app/juice-shop
+        run: npm install --legacy-peer-deps
+
+      # --- Software Composition Analysis (SCA) ---
       - name: Run Snyk SCA
         uses: snyk/actions/node@master
         with:
@@ -53,7 +58,6 @@ jobs:
           args: --file=app/juice-shop/package.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
 
       # --- Infrastructure as Code (Terraform) ---
       - name: Run Checkov (IaC Scan)
