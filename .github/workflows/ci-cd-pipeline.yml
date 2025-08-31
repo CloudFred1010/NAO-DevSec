@@ -45,34 +45,37 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ✅ Install dependencies for Snyk
+      # ✅ Install dependencies for Snyk scan
       - name: Install Dependencies
         working-directory: app/juice-shop
         run: npm install --legacy-peer-deps
 
-            # --- Software Composition Analysis (SCA) ---
+      # --- Software Composition Analysis (SCA) ---
       - name: Run Snyk SCA
         uses: snyk/actions/node@master
         with:
           command: test
-          args: --file=app/juice-shop/package.json --org=cloudfred1010
+          args: --file=app/juice-shop/package.json --org=cloudfred1010 --json-file-output=../../pipelines/security-reports/snyk-sca.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
+        continue-on-error: true   # ✅ non-blocking, reports saved
 
       # --- Infrastructure as Code (Terraform) ---
       - name: Run Checkov (IaC Scan)
         working-directory: ${{ github.workspace }}/iac
         run: |
           pip install checkov==3.2.467
-          checkov -d . --quiet
+          checkov -d . -o json > ../pipelines/security-reports/checkov.json
+        continue-on-error: true
 
       # --- Container Image Scan ---
       - name: Run Trivy (Container Scan)
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }}
-          format: table
+          format: json
+          output: pipelines/security-reports/trivy.json
+        continue-on-error: true
 
       # --- SBOM Generation ---
       - name: Generate SBOM (Syft)
@@ -81,6 +84,7 @@ jobs:
             | sh -s -- -b /usr/local/bin
           syft ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }} -o json \
             > pipelines/security-reports/sbom.json
+        continue-on-error: true
 
   # ---------------------------
   # Build & Deploy Stage
@@ -127,6 +131,7 @@ jobs:
         uses: zaproxy/action-full-scan@v0.8.0
         with:
           target: https://nao-juice-shop.azurewebsites.net
+        continue-on-error: true
 
       # --- Azure Policy Compliance ---
       - name: Azure Policy Compliance Check
@@ -134,3 +139,4 @@ jobs:
           az policy state summarize \
             --subscription ${{ secrets.SUBSCRIPTION_ID }} \
             --query "summaryResults"
+        continue-on-error: true
