@@ -1,8 +1,11 @@
 # ---------------------------
 # Resource Group
 # ---------------------------
+# ---------------------------
+# Resource Group (imported, do not recreate)
+# ---------------------------
 resource "azurerm_resource_group" "main" {
-  name     = var.resource_group_name
+  name     = "nao-juice-rg"
   location = var.location
 }
 

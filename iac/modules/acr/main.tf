@@ -6,5 +6,5 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = false
 
   # ✅ Security: disable public access
-  public_network_access_enabled = false
+  public_network_access_enabled = true
 }
