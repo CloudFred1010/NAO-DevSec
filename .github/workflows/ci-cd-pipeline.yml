@@ -32,7 +32,7 @@ jobs:
           pre-commit run --all-files
 
       - name: Run Unit Tests
-        working-directory: app/juice-shop   # ✅ root of Juice Shop
+        working-directory: ${{ github.workspace }}/app/juice-shop   # ✅ fixed absolute path
         run: |
           npm install --legacy-peer-deps
           npm test
@@ -57,7 +57,7 @@ jobs:
 
       # --- Infrastructure as Code (Terraform) ---
       - name: Run Checkov (IaC Scan)
-        working-directory: iac
+        working-directory: ${{ github.workspace }}/iac   # ✅ fixed absolute path
         run: |
           pip install checkov==3.2.467
           checkov -d . --quiet
@@ -102,7 +102,7 @@ jobs:
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }}
 
       - name: Terraform Deploy
-        working-directory: iac
+        working-directory: ${{ github.workspace }}/iac   # ✅ fixed absolute path
         run: |
           terraform init
           terraform validate
