@@ -67,13 +67,13 @@ jobs:
           image-ref: ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }}
           format: table
 
-            # --- SBOM Generation ---
+                 # --- SBOM Generation ---
       - name: Generate SBOM (Syft)
-        uses: anchore/syft@v0.98.0   # ✅ correct repo and a stable release tag
-        with:
-          image: ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }}
-          output: pipelines/security-reports/sbom.json
-
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh \
+            | sh -s -- -b /usr/local/bin
+          syft ${{ secrets.ACR_LOGIN_SERVER }}/juice-shop:${{ github.sha }} -o json \
+            > pipelines/security-reports/sbom.json
 
   # ---------------------------
   # Build & Deploy Stage
