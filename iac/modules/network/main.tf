@@ -11,12 +11,11 @@ resource "azurerm_network_security_group" "secure_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
-    source_address_prefix      = "*"
+    source_address_prefix      = "*"         # HTTPS can stay open
     destination_address_prefix = "*"
   }
 
-  # Just-In-Time SSH would be controlled in Azure Security Center,
-  # but for now we’ll allow SSH for admin use (tighten later).
+  # 🔒 Harden SSH access
   security_rule {
     name                       = "AllowSSH"
     priority                   = 200
@@ -25,7 +24,7 @@ resource "azurerm_network_security_group" "secure_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "*"
+    source_address_prefix      = "185.241.227"   # ✅ Replace with your public IP
     destination_address_prefix = "*"
   }
 }

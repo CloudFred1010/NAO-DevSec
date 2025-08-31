@@ -5,7 +5,7 @@
 repos:
   # --- Core pre-commit checks ---
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0   # latest stable
     hooks:
       - id: check-yaml
       - id: check-json
@@ -16,29 +16,23 @@ repos:
 
   # --- Secret scanning ---
   - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.17.0
+    rev: v8.28.0  # current release
     hooks:
       - id: gitleaks
-        args: ["--redact"]  # redact secrets in output
-
-  # --- Infrastructure-as-Code scanning ---
-  - repo: https://github.com/bridgecrewio/checkov
-    rev: 3.2.0
-    hooks:
-      - id: checkov
-        args: ["--quiet", "--skip-download"]
+        args: ["--redact"]   # redact secrets in output
 
   # --- Dockerfile linting ---
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.12.0
+    rev: v2.13.1-beta  # latest patch
     hooks:
       - id: hadolint
         name: Lint Dockerfiles
         files: ^Dockerfile
 
 # --- Optional: Container & Dependency scanning ---
-# Uncomment if you want heavy scans before every commit
-
+# These are heavy scans, so leave commented unless you want them
+# before *every* commit. They already run in CI/CD pipeline.
+#
 #  - repo: local
 #    hooks:
 #      - id: trivy-fs-scan

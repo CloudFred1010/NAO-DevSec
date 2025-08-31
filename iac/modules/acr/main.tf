@@ -4,4 +4,13 @@ resource "azurerm_container_registry" "acr" {
   location            = var.location
   sku                 = "Premium"
   admin_enabled       = false
+
+  # Security fix: disable public access
+  public_network_access_enabled = false
+
+  # Governance: cleanup untagged manifests automatically
+  retention_policy {
+    days    = 30
+    enabled = true
+  }
 }
