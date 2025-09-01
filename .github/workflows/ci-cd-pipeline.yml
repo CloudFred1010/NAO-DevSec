@@ -67,7 +67,7 @@ jobs:
           checkov -d . -o json > ../pipelines/security-reports/checkov.json
         continue-on-error: true
 
-      # ✅ Build image locally for scanning (avoids ACR auth errors)
+      # ✅ Build image locally for scanning
       - name: Build Docker image for scanning
         run: docker build -t juice-shop:${{ github.sha }} ./app/juice-shop
 
@@ -85,6 +85,13 @@ jobs:
             | sh -s -- -b /usr/local/bin
           syft juice-shop:${{ github.sha }} -o json > pipelines/security-reports/sbom.json
         continue-on-error: true
+
+      # Upload reports as artifacts for visibility
+      - name: Upload Security Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: pipelines/security-reports/
 
   # ---------------------------
   # Build & Deploy Stage
@@ -150,6 +157,6 @@ jobs:
       - name: Azure Policy Compliance Check
         run: |
           az policy state summarize \
-            --subscription $ARM_SUBSCRIPTION_ID \
+            --subscription ${{ env.ARM_SUBSCRIPTION_ID }} \
             --query "summaryResults"
         continue-on-error: true
