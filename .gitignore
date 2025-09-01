@@ -1,24 +1,39 @@
+# ---------------------------
 # Python venv
+# ---------------------------
 .venv/
 __pycache__/
 *.pyc
 
-# Node
+# ---------------------------
+# Node.js
+# ---------------------------
 node_modules/
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
+# ---------------------------
 # Terraform
+# ---------------------------
 .terraform/
+.terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.*
 crash.log
+*.backup
+*.tfplan
 
+# ---------------------------
 # Docker
+# ---------------------------
 *.pid
 *.sock
 
+# ---------------------------
 # OS / Editor
+# ---------------------------
 .DS_Store
 Thumbs.db
 *.swp
@@ -27,9 +42,32 @@ Thumbs.db
 .vscode/
 *.log
 
+# ---------------------------
 # Secrets
+# ---------------------------
 *.env
 *.key
 *.crt
 *.pem
 secrets.json
+
+# ---------------------------
+# Security / Scan Outputs
+# ---------------------------
+pipelines/security-reports/
+
+# ---------------------------
+# Juice Shop exclusions
+# ---------------------------
+# Keep sources tracked for CI/CD
+!app/juice-shop/**
+
+# Ignore only build/runtime junk inside Juice Shop
+app/juice-shop/node_modules/
+app/juice-shop/frontend/node_modules/
+app/juice-shop/frontend/dist/
+app/juice-shop/frontend/.angular/cache/
+app/juice-shop/frontend/coverage/
+app/juice-shop/uploads/
+app/juice-shop/data/datacache.json
+app/juice-shop/data/static/codefixes/*.bak

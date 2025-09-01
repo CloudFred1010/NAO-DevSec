@@ -1,0 +1,5 @@
+acr_name           = "naojuiceshopacr"
+kv_name            = "naojuiceshop-kv"
+app_name           = "naojuiceshop-app"
+log_analytics_name = "naojuiceshop-logs"
+admin_ip           = "203.0.113.25"

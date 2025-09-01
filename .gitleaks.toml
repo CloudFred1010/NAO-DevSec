@@ -1,0 +1,11 @@
+title = "Custom gitleaks config with Juice Shop exclusion"
+
+[extend]
+# inherit the default gitleaks rules so you don’t lose scanning coverage
+path = ""
+
+[allowlist]
+description = "Ignore OWASP Juice Shop (intentionally vulnerable)"
+paths = [
+  '''app/juice-shop/'''
+]
