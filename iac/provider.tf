@@ -8,15 +8,13 @@ terraform {
     }
   }
 
-  # ✅ Default: local state (terraform.tfstate in working dir)
-  # Uncomment the block below to use a remote backend in Azure Storage.
-  #
-  # backend "azurerm" {
-  #   resource_group_name   = "nao-tfstate-rg"
-  #   storage_account_name  = "naoterraformstate"
-  #   container_name        = "tfstate"
-  #   key                   = "juice-shop.tfstate"
-  # }
+  # ✅ Remote backend in Azure Storage
+  backend "azurerm" {
+    resource_group_name   = "nao-tfstate-rg"
+    storage_account_name  = "naoterraformstate"
+    container_name        = "tfstate"
+    key                   = "juice-shop.tfstate"
+  }
 }
 
 provider "azurerm" {

@@ -67,7 +67,7 @@ jobs:
           checkov -d . -o json > ../pipelines/security-reports/checkov.json
         continue-on-error: true
 
-      # ✅ Build image locally for scanning (no ACR dependency here)
+      # ✅ Build image locally for scanning (avoids ACR auth errors)
       - name: Build Docker image for scanning
         run: docker build -t juice-shop:${{ github.sha }} ./app/juice-shop
 
